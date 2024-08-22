@@ -23,6 +23,55 @@ from django.db import models
 
 
 # 一対一のリレーションの実装例
+# class Book(models.Model):
+#     """
+#     書籍モデル
+#     """
+
+#     class Meta:
+#         # テーブル名を定義
+#         db_table = "book"
+
+#     # フィールドを定義
+#     title = models.CharField(
+#         verbose_name="タイトル", max_length=255
+#     )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数
+
+
+# class BookStock(models.Model):
+#     """
+#     書籍在庫モデル
+#     """
+
+#     class Meta:
+#         # テーブル名を定義
+#         db_table = "book_stock"
+
+#     # フィールドを定義
+#     book = models.OneToOneField(
+#         Book, verbose_name="本", on_delete=models.CASCADE
+#     )  # on_deleteは親モデルが削除されたときの挙動
+#     quantity = models.IntegerField(
+#         verbose_name="在庫数", default=0
+#     )  # verbose_nameはフィールドのラベル, defaultはデフォルト値
+
+
+# 多対一のリレーションの実装例
+class Publisher(models.Model):
+    """
+    出版社モデル
+    """
+
+    class Meta:
+        # テーブル名を定義
+        db_table = "publisher"
+
+    # フィールドを定義
+    name = models.CharField(
+        verbose_name="出版社名", max_length=255
+    )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数
+
+
 class Book(models.Model):
     """
     書籍モデル
@@ -36,21 +85,6 @@ class Book(models.Model):
     title = models.CharField(
         verbose_name="タイトル", max_length=255
     )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数
-
-
-class BookStock(models.Model):
-    """
-    書籍在庫モデル
-    """
-
-    class Meta:
-        # テーブル名を定義
-        db_table = "book_stock"
-
-    # フィールドを定義
-    book = models.OneToOneField(
-        Book, verbose_name="本", on_delete=models.CASCADE
-    )  # on_deleteは親モデルが削除されたときの挙動
-    quantity = models.IntegerField(
-        verbose_name="在庫数", default=0
-    )  # verbose_nameはフィールドのラベル, defaultはデフォルト値
+    publisher = models.ForeignKey(
+        Publisher, verbose_name="出版社", on_delete=models.PROTECT
+    )  # on_deleteは親モデルが削除されたときの挙動（PROTECTは削除を制限する）
