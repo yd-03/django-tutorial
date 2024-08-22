@@ -1,6 +1,28 @@
 from django.db import models
 
 
+# class Book(models.Model):
+#     """
+#     書籍モデル
+#     """
+
+#     class Meta:
+#         # テーブル名を定義
+#         db_table = "book"
+
+#     # フィールドを定義
+#     title = models.CharField(
+#         verbose_name="タイトル", max_length=255, unique=True
+#     )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数, uniqueは一意制約
+#     price = models.IntegerField(
+#         verbose_name="価格", null=True, blank=True
+#     )  # nullはデータベースにNULLを許可するかどうか, blankはフォームの入力欄に空欄を許可するかどうか
+
+#     def __str__(self):
+#         return self.title
+
+
+# 一対一のリレーションの実装例
 class Book(models.Model):
     """
     書籍モデル
@@ -12,11 +34,23 @@ class Book(models.Model):
 
     # フィールドを定義
     title = models.CharField(
-        verbose_name="タイトル", max_length=255, unique=True
-    )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数, uniqueは一意制約
-    price = models.IntegerField(
-        verbose_name="価格", null=True, blank=True
-    )  # nullはデータベースにNULLを許可するかどうか, blankはフォームの入力欄に空欄を許可するかどうか
+        verbose_name="タイトル", max_length=255
+    )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数
 
-    def __str__(self):
-        return self.title
+
+class BookStock(models.Model):
+    """
+    書籍在庫モデル
+    """
+
+    class Meta:
+        # テーブル名を定義
+        db_table = "book_stock"
+
+    # フィールドを定義
+    book = models.OneToOneField(
+        Book, verbose_name="本", on_delete=models.CASCADE
+    )  # on_deleteは親モデルが削除されたときの挙動
+    quantity = models.IntegerField(
+        verbose_name="在庫数", default=0
+    )  # verbose_nameはフィールドのラベル, defaultはデフォルト値
