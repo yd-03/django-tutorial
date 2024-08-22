@@ -57,22 +57,56 @@ from django.db import models
 
 
 # 多対一のリレーションの実装例
-class Publisher(models.Model):
+# class Publisher(models.Model):
+#     """
+#     出版社モデル
+#     """
+
+#     class Meta:
+#         # テーブル名を定義
+#         db_table = "publisher"
+
+#     # フィールドを定義
+#     name = models.CharField(
+#         verbose_name="出版社名", max_length=255
+#     )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数
+
+
+# class Book(models.Model):
+#     """
+#     書籍モデル
+#     """
+
+#     class Meta:
+#         # テーブル名を定義
+#         db_table = "book"
+
+#     # フィールドを定義
+#     title = models.CharField(
+#         verbose_name="タイトル", max_length=255
+#     )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数
+#     publisher = models.ForeignKey(
+#         Publisher, verbose_name="出版社", on_delete=models.PROTECT
+#     )  # on_deleteは親モデルが削除されたときの挙動（PROTECTは削除を制限する）
+
+
+# 多対多のリレーションの実装例
+class Author(models.Model):
     """
-    出版社モデル
+    著者モデル
     """
 
     class Meta:
         # テーブル名を定義
-        db_table = "publisher"
+        db_table = "author"
 
     # フィールドを定義
     name = models.CharField(
-        verbose_name="出版社名", max_length=255
+        verbose_name="著者名", max_length=255
     )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数
 
 
-class Book(models.Model):
+class Book(models.Models):
     """
     書籍モデル
     """
@@ -85,6 +119,4 @@ class Book(models.Model):
     title = models.CharField(
         verbose_name="タイトル", max_length=255
     )  # verbose_nameはフィールドのラベル, max_lengthは最大文字数
-    publisher = models.ForeignKey(
-        Publisher, verbose_name="出版社", on_delete=models.PROTECT
-    )  # on_deleteは親モデルが削除されたときの挙動（PROTECTは削除を制限する）
+    authors = models.ManyToManyField(Author, verbose_name="著者")
